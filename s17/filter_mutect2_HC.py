@@ -49,17 +49,24 @@ with open(vcfFileTumour, 'r') as tumour_vcf, \
 			# pull out allele information
 			alleles = fields["ALT"].split(',')
 
+			# Save current file positions
+			mat_pos = mat_vcf.tell()
+			child_pos = child_vcf.tell()
+
 			# Look for maternal genotype
 			for line in mat_vcf:
 				if chrom in line and pos in line:
 					mat_allele = line[5].split(',')
 					break
+			mat_vcf.seek(mat_pos)
+
 
 			# Look for child germline genotype
 			for line in child_vcf:
 				if chrom in line and pos in line:
 					child_allele = line[5].split(',')
 					break
+			child_vcf.seek(child_pos)
 
 			germline_alleles = set(mat_allele + child_allele)
 
